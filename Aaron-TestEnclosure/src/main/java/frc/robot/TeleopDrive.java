@@ -49,25 +49,21 @@ public class TeleopDrive extends Command {
       }
 
       speed *= joystick.getRawAxis(RobotMap.kRightStickY);
-      rotation *= joystick.getRawAxis(RobotMap.kRightStickX);
       if(speed > RobotMap.DRIVE_MAX_SPEED) { speed = RobotMap.DRIVE_MAX_SPEED; }
-      if(rotation > RobotMap.DRIVE_MAX_SPEED) { rotation = RobotMap.DRIVE_MAX_SPEED; }
 
-      arcadeDrive(speed, rotation);
+      arcadeDrive(speed);
     }
     else {
     //for tank driving
     speed *= joystick.getRawAxis(RobotMap.kRightStickY);
-    rotation *= joystick.getRawAxis(RobotMap.kRightStickX);
 
     //or, for more curved control:
     // speed *= Math.pow(joystick.getRawAxis(RobotMap.kRightStickY), 3);
     // rotation *= Math.pow(joystick.getRawAxis(RobotMap.kRightStickX), 3);
 
     if(speed > RobotMap.DRIVE_MAX_SPEED) { speed = RobotMap.DRIVE_MAX_SPEED; }
-    if(rotation > RobotMap.DRIVE_MAX_SPEED) { rotation = RobotMap.DRIVE_MAX_SPEED; }
 
-    arcadeDrive(speed, rotation);
+    arcadeDrive(speed);
     }
     //System.out.println(swerveMode);
     if(Robot.joystick.getRawButton(RobotMap.kButtonA)) {
@@ -79,8 +75,8 @@ public class TeleopDrive extends Command {
   }
 
   //to ensure there is only one reference to arcadeDrive at one time.
-  private static void arcadeDrive(double speed, double rotation) {
-    Robot.driveTrain.arcadeDrive(speed, rotation);
+  private static void arcadeDrive(double speed) {
+    Robot.driveTrain.setSpeed(speed);
   }
 
   private double convertXYtoDegree(double xValue, double yValue) {

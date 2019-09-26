@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,7 +28,13 @@ public class Robot extends TimedRobot {
   public static OI oi;
   private static boolean isAzimuthOffsetSetup;
 
-  public static SendableChooser motorChooser;
+  private static final String optionFrontLeft = "Front Left";
+  private static final String optionFrontRight = "Front Right";
+  private static final String optionBackLeft = "Back Left";
+  private static final String optionBackRight = "Back Right";
+  private String motorSelected;
+
+  private final  SendableChooser<String> motorChooser = new SendableChooser<>();
 
   // private static final String kDefaultAuto = "Default";
   // private static final String kCustomAuto = "My Auto";
@@ -47,9 +54,12 @@ public class Robot extends TimedRobot {
     oi = new OI();
     isAzimuthOffsetSetup = false;
 
-    motorChooser = new SendableChooser();
-    
-    
+    motorChooser.setDefaultOption("Front Left", optionFrontLeft);
+    motorChooser.addOption("Front Right", optionFrontRight);
+    motorChooser.addOption("Back Left", optionBackLeft);
+    motorChooser.addOption("Back Right", optionBackRight);
+    SmartDashboard.putData("Motor Chooser", motorChooser);
+
     // m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     // m_chooser.addOption("My Auto", kCustomAuto);
     // SmartDashboard.putData("Auto choices", m_chooser);
@@ -83,6 +93,26 @@ public class Robot extends TimedRobot {
     if(!isAzimuthOffsetSetup) {
       Robot.azimuth.setupOffsets();
       isAzimuthOffsetSetup = true;
+    }
+    motorSelected = motorChooser.getSelected();
+    System.out.println("Motor Selected: " + motorSelected);
+    switch(motorSelected) {
+      case optionFrontLeft:
+        driveTrain.setCurrentMotor(RobotMap.DRIVE_FRONT_LEFT);
+        azimuth.setCurrentMotor(RobotMap.AZ_FRONT_LEFT);
+        break;
+      case optionFrontRight:
+        driveTrain.setCurrentMotor(RobotMap.DRIVE_FRONT_RIGHT);
+        azimuth.setCurrentMotor(RobotMap.AZ_FRONT_RIGHT);
+        break;
+      case optionBackLeft:
+        driveTrain.setCurrentMotor(RobotMap.DRIVE_BACK_LEFT);
+        azimuth.setCurrentMotor(RobotMap.AZ_BACK_LEFT); 
+        break;
+      case optionBackRight:
+        driveTrain.setCurrentMotor(RobotMap.DRIVE_BACK_RIGHT);
+        azimuth.setCurrentMotor(RobotMap.AZ_BACK_RIGHT);
+        break;
     }
     // m_autoSelected = m_chooser.getSelected();
     // // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);

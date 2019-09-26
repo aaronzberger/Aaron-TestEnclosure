@@ -22,12 +22,13 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
  */
 public class AZIMUTH extends Subsystem {
 
-  private int currentMotor = 0;
-
   private TalonSRX talon;
 
   public AZIMUTH() {
-    switch(currentMotor) {
+    }
+
+  public void setCurrentMotor(int deviceID) {
+    switch(deviceID) {
       case RobotMap.AZ_FRONT_LEFT:
         talon = new TalonSRX(RobotMap.AZ_FRONT_LEFT);      
         break;
@@ -42,7 +43,7 @@ public class AZIMUTH extends Subsystem {
         break;
       }
       setupTalon(talon);
-    }
+  }
 
   public void setupOffsets() {
     setupOffset(talon);

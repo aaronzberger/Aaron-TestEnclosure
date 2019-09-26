@@ -18,63 +18,36 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 /**
  * Add your docs here.
  */
-public class DriveTrain extends Subsystem {
-  private CANSparkMax frontLeft;
-  private CANSparkMax frontRight;
-  private CANSparkMax backLeft;
-  private CANSparkMax backRight;
-
-  private SpeedControllerGroup leftMotors;
-  private SpeedControllerGroup rightMotors;
-
-  private DifferentialDrive differentialDrive;
+public class DriveTrain extends Subsystem {  
+  
+  private CANSparkMax spark;
 
   public DriveTrain() {
-    frontLeft = new CANSparkMax(RobotMap.DRIVE_FRONT_LEFT, MotorType.kBrushless);
-    frontRight = new CANSparkMax(RobotMap.DRIVE_FRONT_RIGHT, MotorType.kBrushless);
-    backLeft = new CANSparkMax(RobotMap.DRIVE_BACK_LEFT, MotorType.kBrushless);
-    backRight = new CANSparkMax(RobotMap.DRIVE_BACK_RIGHT, MotorType.kBrushless);
+    }
 
-    leftMotors = new SpeedControllerGroup(frontLeft, backLeft);
-    rightMotors = new SpeedControllerGroup(frontRight, backRight);
-
-    differentialDrive = new DifferentialDrive(leftMotors, rightMotors);
-
-    frontLeft.setInverted(true);
-    frontRight.setInverted(false);
-    backLeft.setInverted(true);
-    backRight.setInverted(false);
-
-    differentialDrive.setSafetyEnabled(false);
-  }
-  
-  public void arcadeDrive(double speed, double rotation) {
-    differentialDrive.arcadeDrive(speed, rotation);
-  }
-
-  public void tankDrive(double leftSpeed, double rightSpeed) {
-    differentialDrive.tankDrive(leftSpeed, rightSpeed);
-  }
-
-  public void setSpeed(int CANID, double speed) {
-    switch(CANID) {
+  public void setCurrentMotor(int devieID) {
+    switch(devieID) {
       case RobotMap.DRIVE_FRONT_LEFT:
-        frontLeft.set(speed);
+        spark = new CANSparkMax(RobotMap.DRIVE_FRONT_LEFT, MotorType.kBrushless);      
         break;
       case RobotMap.DRIVE_FRONT_RIGHT:
-        frontRight.set(speed);
+        spark = new CANSparkMax(RobotMap.DRIVE_FRONT_RIGHT, MotorType.kBrushless); 
         break;
       case RobotMap.DRIVE_BACK_LEFT:
-        backLeft.set(speed);
+        spark = new CANSparkMax(RobotMap.DRIVE_BACK_LEFT, MotorType.kBrushless);
         break;
       case RobotMap.DRIVE_BACK_RIGHT:
-        backRight.set(speed);
+        spark = new CANSparkMax(RobotMap.DRIVE_BACK_RIGHT, MotorType.kBrushless);
         break;
-    }
+      }
+  }
+
+  public void setSpeed(double speed) {
+    spark.set(speed);
   }
 
   public void stop() {
-    tankDrive(0.0, 0.0);
+    setSpeed(0.0);
   }
   
   @Override

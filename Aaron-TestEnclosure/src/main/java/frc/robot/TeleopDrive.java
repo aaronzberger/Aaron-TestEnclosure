@@ -36,7 +36,6 @@ public class TeleopDrive extends Command {
   @Override
   protected void execute() {
     double speed = RobotMap.DRIVE_THROTTLE_SCALE;
-    double rotation = RobotMap.DRIVE_STEERING_SCALE;
     if(swerveMode) {
       //for azimuth translation driving
       double xValue = joystick.getRawAxis(RobotMap.kLeftStickX);

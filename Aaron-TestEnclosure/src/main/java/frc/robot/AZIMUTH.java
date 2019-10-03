@@ -12,10 +12,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.command.WaitCommand;
 
 /**
  * Add your docs here.
@@ -24,8 +21,35 @@ public class AZIMUTH extends Subsystem {
 
   private TalonSRX talon;
 
+  //offsets for each azimuth wheel (absolute positions where all wheels are pointed forward)
+	private int AZ_FRONT_LEFT_OFFSET = 2297;
+	private int AZ_FRONT_RIGHT_OFFSET = 2283;
+	private int AZ_BACK_LEFT_OFFSET = 2172;
+	private int AZ_BACK_RIGHT_OFFSET = 2412;
+
   public AZIMUTH() {
-    }
+  }
+
+  public void addToOffset(int deviceID, int addition) {
+    switch(deviceID) {
+      case RobotMap.AZ_FRONT_LEFT:
+        AZ_FRONT_LEFT_OFFSET += addition;
+        setupOffset(talon);
+        break;
+      case RobotMap.AZ_FRONT_RIGHT:
+        AZ_FRONT_RIGHT_OFFSET += addition;
+        setupOffset(talon);
+        break;
+      case RobotMap.AZ_BACK_LEFT:
+        AZ_BACK_LEFT_OFFSET += addition;
+        setupOffset(talon);
+        break;
+      case RobotMap.AZ_BACK_RIGHT:
+        AZ_BACK_RIGHT_OFFSET += addition;
+        setupOffset(talon);
+        break;
+      }
+  }
 
   public void setCurrentMotor(int deviceID) {
     switch(deviceID) {
@@ -74,7 +98,7 @@ public class AZIMUTH extends Subsystem {
   }
 
   private void setupTalon(TalonSRX talon) {
-    talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0 , 10);
+    //talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0 , 10);
     talon.setSensorPhase(false);
     talon.config_kP(0, 3);
     talon.config_kI(0, 0);
@@ -86,24 +110,24 @@ public class AZIMUTH extends Subsystem {
   }
 
   private void setupOffset(TalonSRX talon) {
-    //talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0 , 10);
+    talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0 , 10);
     int currentEncoderValue = talon.getSelectedSensorPosition();
     int currentActualPosition = -10;
     switch(talon.getDeviceID()) {
       case RobotMap.AZ_FRONT_LEFT:
-        currentActualPosition = currentEncoderValue + RobotMap.AZ_FRONT_LEFT_OFFSET;
+        currentActualPosition = currentEncoderValue + AZ_FRONT_LEFT_OFFSET;
         System.out.println("front left (AA) actual pos: " + currentActualPosition + "\nfront left encoder val: " + currentEncoderValue);
         break;
       case RobotMap.AZ_FRONT_RIGHT:
-        currentActualPosition = currentEncoderValue + RobotMap.AZ_FRONT_RIGHT_OFFSET;
+        currentActualPosition = currentEncoderValue + AZ_FRONT_RIGHT_OFFSET;
         System.out.println("front right (DA) actual pos: " + currentActualPosition + "\nfront right encoder val: " + currentEncoderValue);
         break;
       case RobotMap.AZ_BACK_LEFT:
-        currentActualPosition = currentEncoderValue + RobotMap.AZ_BACK_LEFT_OFFSET;
+        currentActualPosition = currentEncoderValue + AZ_BACK_LEFT_OFFSET;
         System.out.println("back left (BA) actual pos: " + currentActualPosition + "\nback left encoder val: " + currentEncoderValue);
         break;
       case RobotMap.AZ_BACK_RIGHT:
-        currentActualPosition = currentEncoderValue + RobotMap.AZ_BACK_RIGHT_OFFSET;
+        currentActualPosition = currentEncoderValue + AZ_BACK_RIGHT_OFFSET;
         System.out.println("back right (CA) actual pos: " + currentActualPosition + "\nback right encoder val: " + currentEncoderValue);
         break;
     }
@@ -129,8 +153,16 @@ public class AZIMUTH extends Subsystem {
     // talon.setSelectedSensorPosition(0);
   }
 
+  public int getCurrentPosition() {
+    return talon.getSelectedSensorPosition();
+  }
+
   public void setSpeed(double speed) {
     talon.set(ControlMode.PercentOutput, speed);
+  }
+
+  public int getCurrentMotor() {
+    return talon.getDeviceID();
   }
 
   @Override

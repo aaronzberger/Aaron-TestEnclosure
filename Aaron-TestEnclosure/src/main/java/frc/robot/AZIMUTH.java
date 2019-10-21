@@ -30,6 +30,14 @@ public class AZIMUTH extends Subsystem {
   public AZIMUTH() {
   }
 
+  public void setToCoastMode() {
+    talon.setNeutralMode(NeutralMode.Coast);
+  }
+
+  public void setToBrakeMode() {
+    talon.setNeutralMode(NeutralMode.Brake);
+  }
+
   public void addToOffset(int deviceID, int addition) {
     switch(deviceID) {
       case RobotMap.AZ_FRONT_LEFT:

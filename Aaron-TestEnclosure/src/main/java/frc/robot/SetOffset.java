@@ -26,6 +26,7 @@ public class SetOffset extends Command {
   protected void initialize() {
     beginningPosition = Robot.azimuth.getCurrentPosition();
     deviceID = Robot.azimuth.getCurrentMotor();
+    Robot.azimuth.setToCoastMode();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -42,8 +43,9 @@ public class SetOffset extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    change = Robot.azimuth.getCurrentPosition() - beginningPosition;
+    change = (Robot.azimuth.getCurrentPosition() - beginningPosition);
     Robot.azimuth.addToOffset(deviceID, change);
+    Robot.azimuth.setToBrakeMode();
   }
 
   // Called when another command which requires one or more of the same

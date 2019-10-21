@@ -89,30 +89,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    if(!isAzimuthOffsetSetup) {
-      Robot.azimuth.setupOffsets();
-      isAzimuthOffsetSetup = true;
-    }
-    motorSelected = motorChooser.getSelected();
-    System.out.println("Motor Selected: " + motorSelected);
-    switch(motorSelected) {
-      case optionFrontLeft:
-        driveTrain.setCurrentMotor(RobotMap.DRIVE_FRONT_LEFT);
-        azimuth.setCurrentMotor(RobotMap.AZ_FRONT_LEFT);
-        break;
-      case optionFrontRight:
-        driveTrain.setCurrentMotor(RobotMap.DRIVE_FRONT_RIGHT);
-        azimuth.setCurrentMotor(RobotMap.AZ_FRONT_RIGHT);
-        break;
-      case optionBackLeft:
-        driveTrain.setCurrentMotor(RobotMap.DRIVE_BACK_LEFT);
-        azimuth.setCurrentMotor(RobotMap.AZ_BACK_LEFT); 
-        break;
-      case optionBackRight:
-        driveTrain.setCurrentMotor(RobotMap.DRIVE_BACK_RIGHT);
-        azimuth.setCurrentMotor(RobotMap.AZ_BACK_RIGHT);
-        break;
-    }
     // m_autoSelected = m_chooser.getSelected();
     // // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     // System.out.println("Auto selected: " + m_autoSelected);
@@ -137,10 +113,30 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-     if(!isAzimuthOffsetSetup) {
-       Robot.azimuth.setupOffsets();
-       isAzimuthOffsetSetup = true;
+    motorSelected = motorChooser.getSelected();
+    System.out.println("Motor Selected: " + motorSelected);
+    switch(motorSelected) {
+      case optionFrontLeft:
+        driveTrain.setCurrentMotor(RobotMap.DRIVE_FRONT_LEFT);
+        azimuth.setCurrentMotor(RobotMap.AZ_FRONT_LEFT);
+        break;
+      case optionFrontRight:
+        driveTrain.setCurrentMotor(RobotMap.DRIVE_FRONT_RIGHT);
+        azimuth.setCurrentMotor(RobotMap.AZ_FRONT_RIGHT);
+        break;
+      case optionBackLeft:
+        driveTrain.setCurrentMotor(RobotMap.DRIVE_BACK_LEFT);
+        azimuth.setCurrentMotor(RobotMap.AZ_BACK_LEFT); 
+        break;
+      case optionBackRight:
+        driveTrain.setCurrentMotor(RobotMap.DRIVE_BACK_RIGHT);
+        azimuth.setCurrentMotor(RobotMap.AZ_BACK_RIGHT);
+        break;
      }
+    if(!isAzimuthOffsetSetup) {
+      Robot.azimuth.setupOffsets();
+      isAzimuthOffsetSetup = true;
+    }
   }
 
   /**

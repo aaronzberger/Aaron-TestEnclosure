@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
   public static AZIMUTH azimuth;
   public static Joystick joystick;
   public static OI oi;
+  public static TeleopDrive teleopDrive;
   private static boolean isAzimuthOffsetSetup;
 
   private static final String optionFrontLeft = "Front Left";
@@ -34,12 +35,6 @@ public class Robot extends TimedRobot {
 
   private final  SendableChooser<String> motorChooser = new SendableChooser<>();
 
-  // private static final String kDefaultAuto = "Default";
-  // private static final String kCustomAuto = "My Auto";
-  // private String m_autoSelected;
-
-  // private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -49,6 +44,8 @@ public class Robot extends TimedRobot {
     driveTrain = new DriveTrain();
     azimuth = new AZIMUTH();
     joystick = new Joystick(0);
+    teleopDrive = new TeleopDrive();
+    driveTrain.setDefaultCommand(teleopDrive);
     oi = new OI();
     isAzimuthOffsetSetup = false;
 
@@ -59,9 +56,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Motor Chooser", motorChooser);
 
     SmartDashboard.putData("Set Offset", new SetOffset());
-    // m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    // m_chooser.addOption("My Auto", kCustomAuto);
-    // SmartDashboard.putData("Auto choices", m_chooser);
   }
 
   /**

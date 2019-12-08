@@ -10,7 +10,6 @@ package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  * Add your docs here.
@@ -51,6 +50,6 @@ public class DriveTrain extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new TeleopDrive());
+    //setDefaultCommand(new TeleopDrive());
   }
 }

@@ -106,7 +106,7 @@ public class AZIMUTH extends Subsystem {
   }
 
   private void setupTalon(TalonSRX talon) {
-    //talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0 , 10);
+    talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0 , 10);
     talon.setSensorPhase(false);
     talon.config_kP(0, 3);
     talon.config_kI(0, 0);
@@ -165,9 +165,9 @@ public class AZIMUTH extends Subsystem {
     return talon.getSelectedSensorPosition();
   }
 
-  public void setSpeed(double speed) {
-    talon.set(ControlMode.PercentOutput, speed);
-  }
+  // public void setSpeed(double speed) {
+  //   talon.set(ControlMode.PercentOutput, speed);
+  // }
 
   public int getCurrentMotor() {
     return talon.getDeviceID();

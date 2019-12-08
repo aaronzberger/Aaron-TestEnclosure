@@ -24,6 +24,7 @@ public class SetOffset extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.teleopDrive.setSettingOffset(true);
     beginningPosition = Robot.azimuth.getCurrentPosition();
     deviceID = Robot.azimuth.getCurrentMotor();
     Robot.azimuth.setToCoastMode();
@@ -46,6 +47,7 @@ public class SetOffset extends Command {
     change = (Robot.azimuth.getCurrentPosition() - beginningPosition);
     Robot.azimuth.addToOffset(deviceID, change);
     Robot.azimuth.setToBrakeMode();
+    Robot.teleopDrive.setSettingOffset(false);
   }
 
   // Called when another command which requires one or more of the same

@@ -15,7 +15,8 @@ public class TeleopDrive extends Command {
   private AZIMUTH azimuth;
   private DriveTrain driveTrain;
   private Joystick joystick;
-  public static boolean swerveMode = false;
+  private boolean swerveMode = false;
+  private boolean settingOffset = false;
 
   public TeleopDrive() {
     this.driveTrain = Robot.driveTrain;
@@ -35,38 +36,40 @@ public class TeleopDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double speed = RobotMap.DRIVE_THROTTLE_SCALE;
-    if(swerveMode) {
-      //for azimuth translation driving
-      double xValue = joystick.getRawAxis(RobotMap.kLeftStickX);
-      double yValue = joystick.getRawAxis(RobotMap.kLeftStickY);
-      double degreeValue = convertXYtoDegree(xValue, yValue);
-      if(xValue < -0.1 || xValue > 0.1 || yValue < -0.1 || yValue > 0.1) {
-        azimuth.setWheelsToDegree(degreeValue);
+    if(!settingOffset) {
+      double speed = RobotMap.DRIVE_THROTTLE_SCALE;
+      if(swerveMode) {
+        //for azimuth translation driving
+        double xValue = joystick.getRawAxis(RobotMap.kLeftStickX);
+        double yValue = joystick.getRawAxis(RobotMap.kLeftStickY);
+        double degreeValue = convertXYtoDegree(xValue, yValue);
+        if(xValue < -0.1 || xValue > 0.1 || yValue < -0.1 || yValue > 0.1) {
+          azimuth.setWheelsToDegree(degreeValue);
         //arcadeDrive(RobotMap.DRIVE_THROTTLE_SCALE, 0.0);
-        System.out.println("Set wheel to " + degreeValue);
+          System.out.println("Set wheel to " + degreeValue);
+        }
+
+        speed *= joystick.getRawAxis(RobotMap.kRightStickY);
+        if(speed > RobotMap.DRIVE_MAX_SPEED) { speed = RobotMap.DRIVE_MAX_SPEED; }
+
+       arcadeDrive(speed);
       }
-
-      speed *= joystick.getRawAxis(RobotMap.kRightStickY);
-      if(speed > RobotMap.DRIVE_MAX_SPEED) { speed = RobotMap.DRIVE_MAX_SPEED; }
-
-      arcadeDrive(speed);
-    }
-    else {
-    //for tank driving
-      speed *= joystick.getRawAxis(RobotMap.kRightStickY);
-    //or, for more curved control:
-    // speed *= Math.pow(joystick.getRawAxis(RobotMap.kRightStickY), 3);
-    // rotation *= Math.pow(joystick.getRawAxis(RobotMap.kRightStickX), 3);
-      if(speed > RobotMap.DRIVE_MAX_SPEED) { speed = RobotMap.DRIVE_MAX_SPEED; }
-      arcadeDrive(speed);
-    }
-    //System.out.println(swerveMode);
-    if(Robot.joystick.getRawButton(RobotMap.kButtonA)) {
-      swerveMode = false;
-    }
-    if(Robot.joystick.getRawButton(RobotMap.kButtonB)) {
-      swerveMode = true;
+      else {
+      //for tank driving
+        speed *= joystick.getRawAxis(RobotMap.kRightStickY);
+      //or, for more curved control:
+      // speed *= Math.pow(joystick.getRawAxis(RobotMap.kRightStickY), 3);
+      // rotation *= Math.pow(joystick.getRawAxis(RobotMap.kRightStickX), 3);
+        if(speed > RobotMap.DRIVE_MAX_SPEED) { speed = RobotMap.DRIVE_MAX_SPEED; }
+        arcadeDrive(speed);
+      }
+      //System.out.println(swerveMode);
+      if(Robot.joystick.getRawButton(RobotMap.kButtonA)) {
+        swerveMode = false;
+      }
+      if(Robot.joystick.getRawButton(RobotMap.kButtonB)) {
+        swerveMode = true;
+      }
     }
   }
 
@@ -90,6 +93,10 @@ public class TeleopDrive extends Command {
       returnValue = (270 - Math.toDegrees(Math.atan(Math.abs(yValue)/(Math.abs(xValue)))));
     }
     return returnValue;
+  }
+
+  public void setSettingOffset(boolean settingOffset) {
+    this.settingOffset = settingOffset;
   }
   
   // Make this return true when this Command no longer needs to run execute()
